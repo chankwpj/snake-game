@@ -5,4 +5,6 @@ export interface GameState {
     score: number;
     food: number[];
     isSpeedUpdated: boolean;
+    isPaused: boolean;
+    isGameOver: boolean;
 }

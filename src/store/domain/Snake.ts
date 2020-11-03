@@ -1,13 +1,13 @@
-import { textSpanIsEmpty } from "typescript";
+import {BOARD_LENGTH, INITIAL_SPEED, INITIAL_SNAKE_HEAD_X, INITIAL_SNAKE_HEAD_Y, INITIAL_BODY} from "../../Constant";
 
 class Snake {
 
-  x: number = 0;
-  y: number = 2;
-  bodyLength: number = 3;
-  body: number[][] = [[0, 2], [0, 1], [0, 0]];
+  x: number = INITIAL_SNAKE_HEAD_X;
+  y: number = INITIAL_SNAKE_HEAD_Y;
+  bodyLength: number = INITIAL_BODY.length;
+  body: number[][] = INITIAL_BODY;
   direction: Direction = Direction.Right;
-  speed: number = 250;
+  speed: number = INITIAL_SPEED;
 
   move(): void {
     if (this.direction === Direction.Up) {
@@ -21,15 +21,15 @@ class Snake {
     }
 
     if (this.x < 0) {
-      this.x = 29;
+      this.x = BOARD_LENGTH - 1;
     }
     if (this.y < 0) {
-      this.y = 29;
+      this.y = BOARD_LENGTH - 1;
     }
-    if (this.x >= 30) {
+    if (this.x >= BOARD_LENGTH) {
       this.x = 0;
     }
-    if (this.y >= 30) {
+    if (this.y >= BOARD_LENGTH) {
       this.y = 0;
     }
         
@@ -56,6 +56,14 @@ class Snake {
       return;
     }
     this.direction = dir;
+  }
+
+  isCrashed(): boolean {
+    const set = new Set();
+    this.body.map((bodyPart: number[]) => {
+      set.add(bodyPart[0] + '' + bodyPart[1]); //TODO: bodyPart comparision is not working
+    })
+    return set.size !== this.body.length;
   }
 
 }

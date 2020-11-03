@@ -1,13 +1,15 @@
 import { Action, Reducer } from 'redux';
 import { GameState } from "./domain/GameState"
-import { MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, ActionTypes } from './domain/actions'
+import { ActionTypes, MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME } from './domain/actions'
 import { Snake } from './domain/Snake';
 
 const defaultState: GameState = {
     snake: new Snake(),
     score: 0,
     food: randomPosition(),
-    isSpeedUpdated: false
+    isSpeedUpdated: false,
+    isPaused: false,
+    isGameOver: false,
 };
 
 function randomPosition(): number[] {
@@ -18,11 +20,18 @@ export const actionReducer: Reducer<GameState, Action> = (
     state = defaultState,
     action: ActionTypes
 ) => {
+
+    if (state.isGameOver) {
+        return state;
+    }
+
     const nextState: GameState = {
         snake: Object.create(state.snake) as Snake,
         score: state.score,
         food: state.food,
-        isSpeedUpdated: state.isSpeedUpdated
+        isSpeedUpdated: false,
+        isPaused: state.isPaused,
+        isGameOver: state.isGameOver
     };
 
     const snake = nextState.snake;
@@ -42,13 +51,21 @@ export const actionReducer: Reducer<GameState, Action> = (
                 nextState.isSpeedUpdated = true;
                 nextState.food = randomPosition();
                 nextState.score += 10;
-            } else {
-                nextState.isSpeedUpdated = false;
+            } else if (snake.isCrashed()) {
+                console.log('Game is over.');
+                nextState.isGameOver = true;
             }
-            // console.log("new state", nextState.food);
             return nextState;
         case CHANGE_SNAKE_DIRECTION:
             snake.changeDirection(action.direction);
+            return nextState;
+        case PAUSE_GAME:
+            console.log('Pause the game');
+            nextState.isPaused = true;
+            return nextState;
+        case CONTINUE_GAME:
+            console.log('Continue the game');
+            nextState.isPaused = false;
             return nextState;
         default:
             return state;
