@@ -1,5 +1,12 @@
 import {BOARD_LENGTH, INITIAL_SPEED, INITIAL_SNAKE_HEAD_X, INITIAL_SNAKE_HEAD_Y, INITIAL_BODY} from "../../Constant";
 
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right
+}
+
 class Snake {
 
   x: number = INITIAL_SNAKE_HEAD_X;
@@ -62,17 +69,11 @@ class Snake {
     const set = new Set();
     this.body.map((bodyPart: number[]) => {
       set.add(bodyPart[0] + '' + bodyPart[1]); //TODO: bodyPart comparision is not working
+      return set;
     })
     return set.size !== this.body.length;
   }
 
-}
-
-enum Direction {
-  Up,
-  Down,
-  Left,
-  Right
 }
 
 export { Snake, Direction };

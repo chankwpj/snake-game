@@ -2,7 +2,7 @@ import { Action, Reducer } from 'redux';
 import { GameState } from "./domain/GameState"
 import { ActionTypes, MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME } from './domain/actions'
 import { Snake } from './domain/Snake';
-import { BOARD_LENGTH } from '../Constant';
+import { BOARD_LENGTH, SCORE, SPEED_MULTIPLIER } from '../Constant';
 
 const defaultState: GameState = {
     snake: new Snake(),
@@ -48,10 +48,10 @@ export const actionReducer: Reducer<GameState, Action> = (
             snake.move();
             if (snake.x === state.food[0] && snake.y === state.food[1]) {
                 snake.bodyLength += 1;
-                snake.speed *= 0.75;
+                snake.speed *= SPEED_MULTIPLIER;
                 nextState.isSpeedUpdated = true;
                 nextState.food = randomPosition();
-                nextState.score += 10;
+                nextState.score += SCORE;
             } else if (snake.isCrashed()) {
                 console.log('Game is over.');
                 nextState.isGameOver = true;
