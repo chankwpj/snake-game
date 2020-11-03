@@ -1,5 +1,5 @@
 
-export const BOARD_LENGTH: number = 30;
+export const BOARD_LENGTH: number = 15;
 export const INITIAL_SPEED: number = 100;
 export const INITIAL_SNAKE_HEAD_X: number = 0;
 export const INITIAL_SNAKE_HEAD_Y: number = 8;

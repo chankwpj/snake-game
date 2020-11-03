@@ -2,6 +2,7 @@ import { Action, Reducer } from 'redux';
 import { GameState } from "./domain/GameState"
 import { ActionTypes, MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME } from './domain/actions'
 import { Snake } from './domain/Snake';
+import { BOARD_LENGTH } from '../Constant';
 
 const defaultState: GameState = {
     snake: new Snake(),
@@ -13,7 +14,7 @@ const defaultState: GameState = {
 };
 
 function randomPosition(): number[] {
-    return [Math.floor(Math.random() * 30), Math.floor(Math.random() * 30)];
+    return [Math.floor(Math.random() * BOARD_LENGTH), Math.floor(Math.random() * BOARD_LENGTH)];
 }
 
 export const actionReducer: Reducer<GameState, Action> = (
