@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {BOARD_LENGTH} from './Constant';
+import {BOARD_LENGTH, BOARD} from './Constant';
 import {Snake} from './store/domain/Snake';
 
 interface Props {
@@ -14,16 +14,13 @@ class Board extends React.Component {
     const { snake, food } = this.props as Props;
     return (
       <div className="snake-game__map-wrapper">
-        {
-          //TODO: Array.apply seems not memory efficent
-          Array.apply(0, Array(BOARD_LENGTH)).map((v1, r) => {
-            return Array.apply(0, Array(BOARD_LENGTH)).map((v2, c) => {
-              return <div
-                className={this.updateBoard(snake, food, r, c)}
-                key={this.toKey(r, c)} />
-            })
-          })
-        }
+        {BOARD.map((row, rindx) => {
+          return row.map((col, cindx) => {
+            return <div
+            className={this.updateBoard(snake, food, rindx, cindx)}
+            key={this.toKey(rindx, cindx)}/>
+          });
+        })}
       </div>
     );
   }

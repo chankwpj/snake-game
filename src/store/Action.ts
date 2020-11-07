@@ -1,4 +1,4 @@
-import {MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME} from './domain/actions';
+import {MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME, RESET_GAME} from './domain/actions';
 import { Direction } from './domain/Snake';
 
 export const moveSnake = () => ({
@@ -17,3 +17,8 @@ export const pauseGame = () => ({
 export const continueGame = () => ({
     type: CONTINUE_GAME,
 });
+
+export const resetGame = () => ({
+    type: RESET_GAME,
+});
+

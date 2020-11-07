@@ -7,14 +7,16 @@ import keydown from 'react-keydown';
 import './App.css';
 import Board from './Board';
 import { Direction, Snake } from './store/domain/Snake';
-import { moveSnake, changeSnakeDirection, pauseGame, continueGame } from './store/Action';
+import { moveSnake, changeSnakeDirection, pauseGame, continueGame, resetGame } from './store/Action';
 import Score from './Score';
+import Modal from './Modal';
 
 interface AppProps {
   move: () => void;
   changeDirection: (dir: Direction) => void;
   pauseCommand: () => void;
   continueCommand: () => void;
+  resetCommand:() => void;
 }
 
 //TODO: this should be able to extends AppProps and AppState
@@ -23,11 +25,13 @@ interface FullProps {
   changeDirection: (dir: Direction) => void;
   pauseCommand: () => void;
   continueCommand: () => void;
+  resetCommand:() => void;
   snake: Snake;
   score: number;
   food: number[];
   isSpeedUpdated: boolean;
   isPaused: boolean;
+  isGameOver: boolean;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -43,7 +47,8 @@ const mapDispatchToProps = (dispatch: Dispatch): AppProps => ({
   move: () => dispatch(moveSnake()),
   changeDirection: (dir: Direction) => dispatch(changeSnakeDirection(dir)),
   pauseCommand: () => dispatch(pauseGame()),
-  continueCommand: () => dispatch(continueGame())
+  continueCommand: () => dispatch(continueGame()),
+  resetCommand:() => dispatch(resetGame()),
 });
 
 class App extends React.Component<AppProps, AppState> {
@@ -59,7 +64,9 @@ class App extends React.Component<AppProps, AppState> {
 
   componentDidUpdate() {
     const fullProps = this.props as FullProps;
-    if (!fullProps.isPaused || fullProps.isSpeedUpdated) {
+    if (fullProps.isGameOver) {
+      clearInterval(this.gameInterval);
+    } else if (!fullProps.isPaused || fullProps.isSpeedUpdated) {
       clearInterval(this.gameInterval);
       this.gameInterval = setInterval(() => { this.props.move() }, fullProps.snake.speed);
     } else {
@@ -72,14 +79,19 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   render() {
-    return (
-      <div className="App">
-        <Score {...this.props} />
-        <Board {...this.props} />
-        {/* <div>Pause Button</div>
-        <div>Direction Control</div> */}
-      </div>
-    );
+    const fullProps = this.props as FullProps;
+    if (fullProps.isGameOver) {
+      return (
+        <Modal {...this.props}></Modal>
+      )
+    } else {
+      return (
+        <div className="App">
+          <Score {...this.props} />
+          <Board {...this.props} />
+        </div>
+      );
+    }
   }
 
   @keydown('down')

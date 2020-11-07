@@ -1,6 +1,6 @@
 import { Action, Reducer } from 'redux';
 import { GameState } from "./domain/GameState"
-import { ActionTypes, MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME } from './domain/actions'
+import { ActionTypes, MOVE_SNAKE, CHANGE_SNAKE_DIRECTION, PAUSE_GAME, CONTINUE_GAME, RESET_GAME } from './domain/actions'
 import { Snake } from './domain/Snake';
 import { BOARD_LENGTH, SCORE, SPEED_MULTIPLIER } from '../Constant';
 
@@ -17,31 +17,38 @@ function randomPosition(): number[] {
     return [Math.floor(Math.random() * BOARD_LENGTH), Math.floor(Math.random() * BOARD_LENGTH)];
 }
 
+function copyState(currentState: GameState) {
+    const nextState: GameState = {
+        snake: new Snake(),
+        score: currentState.score,
+        food: currentState.food,
+        isSpeedUpdated: false,
+        isPaused: currentState.isPaused,
+        isGameOver: currentState.isGameOver
+    };
+
+    const snake = nextState.snake;
+    snake.x = currentState.snake.x;
+    snake.y = currentState.snake.y;
+    snake.speed = currentState.snake.speed;
+    snake.direction = currentState.snake.direction;
+    snake.bodyLength = currentState.snake.bodyLength;
+    snake.body = currentState.snake.body.slice();
+
+    return nextState;
+}
+
 export const actionReducer: Reducer<GameState, Action> = (
     state = defaultState,
     action: ActionTypes
 ) => {
 
-    if (state.isGameOver) {
-        return state;
+    if (action.type === RESET_GAME) {
+        return defaultState;
     }
 
-    const nextState: GameState = {
-        snake: Object.create(state.snake) as Snake,
-        score: state.score,
-        food: state.food,
-        isSpeedUpdated: false,
-        isPaused: state.isPaused,
-        isGameOver: state.isGameOver
-    };
-
+    const nextState: GameState = copyState(state);
     const snake = nextState.snake;
-    snake.x = state.snake.x;
-    snake.y = state.snake.y;
-    snake.speed = state.snake.speed;
-    snake.direction = state.snake.direction;
-    snake.bodyLength = state.snake.bodyLength;
-    snake.body = state.snake.body;
 
     switch (action.type) {
         case MOVE_SNAKE:
