@@ -68,7 +68,7 @@ class Snake {
   isCrashed(): boolean {
     const set = new Set();
     this.body.map((bodyPart: number[]) => {
-      set.add(bodyPart[0] + '' + bodyPart[1]); //TODO: bodyPart comparision is not working
+      set.add(bodyPart[0] + '' + bodyPart[1]);
       return set;
     })
     return set.size !== this.body.length;
