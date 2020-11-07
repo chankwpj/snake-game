@@ -89,6 +89,10 @@ class App extends React.Component<AppProps, AppState> {
         <div className="App">
           <Score {...this.props} />
           <Board {...this.props} />
+          <div>
+            <p>Moving: Arrow Keys</p>
+            <p>Stop/Resume: Esc</p>
+          </div>
         </div>
       );
     }
